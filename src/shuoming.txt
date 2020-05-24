@@ -1,0 +1,99 @@
+node不是一门语言也不是框架，它是JavaScript运行环境
+node特点：
+1.事件驱动
+2.非阻塞IO模型（异步）
+3.轻量和高效
+
+前端负责用户界面，后端负责提供数据和业务接口
+
+命令：
+只用于开发环境: --save-dev
+用于生产环境: --save
+查看下载的内容：npm list
+更新版本：npm update jquery
+删除：npm uninstall jquery
+
+文件引入：
+var fs = require('fs')
+在node中，读写文件也有同步和异步
+
+//同步
+fs.readFileSync('文件名', {flag: 'r', encoding: 'utf-8'})
+
+//异步
+fs.readFile('文件名',{这里可填可不填}, function (err, data) {})
+
+
+//1.读文件(封装)
+let fs = require('fs')
+function fsread(path) {
+  return  new Promise (function (resolve, reject) {
+    fs.readFile ('path', {flag: 'r', encoding: 'utf-8'}, function (err, data) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve (data)
+      }
+    })
+  })
+}
+//这是读一个文件
+var fs1 = fsread('文件名')
+fs1.then (function (res) {
+  console.log(res)
+})
+//这是读多个文件，并且按顺序执行
+async function readlist () {
+  var w1 = await fsread ('')
+  var w2 = await fsread ('')
+  var w3 = await fsread ('')
+  console.log(w1)
+}
+readlist()
+
+
+//2.写文件
+
+let fs = require('fs')
+fs.writeFile('test.txt', '你好啊！！', {flag: 'w', encoding: 'utf-8'}, function (err) {
+  if (err) { } else { }
+})
+//封装写文件
+let fs = require('fs')
+function writefiles (path, content) {
+  return new Promise(function (resolve, reject) {
+    fs.writeFile(path, content, {flag: 'a', encoding: 'utf-8'}, function (err) {
+      if (err) {
+        reject(err)
+      } else {
+        reject(err)
+      }
+    })
+  })
+}
+async function writelist () {
+  //写文件不需要返回内容
+  await writefiles('1.txt', '今天过得好吗？？/n')
+  await writefiles('1.txt', '让我康康？？/n')
+  await writefiles('1.txt', '敲代码使我快乐/n')
+  await writefiles('1.html', <h1>添加到HTML中</h1>)
+}
+writelist()
+
+
+//3.删文件
+let fs = require('fs')
+fs.unlink('1.txt', function () {
+  console.log('删除成功')
+})
+
+//4.buffer
+//buffer内存空间开辟出固定大小的内存:将字符串转为buffer对象
+var str = 'helloworld'
+var buf = Buffer.from(str)
+console.log(buf.toString())
+
+//开辟一个空的buffer（缓冲区）
+let buf1 = Buffer.alloc(10)
+buf1[0] = 255
+console.log(buf1)
